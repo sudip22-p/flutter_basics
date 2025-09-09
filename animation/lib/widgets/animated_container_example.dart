@@ -1,0 +1,37 @@
+import "package:flutter/material.dart";
+
+class AnimatedContainerExample extends StatefulWidget {
+  const AnimatedContainerExample({super.key});
+
+  @override
+  State<AnimatedContainerExample> createState() =>
+      _AnimatedContainerExampleState();
+}
+
+class _AnimatedContainerExampleState extends State<AnimatedContainerExample> {
+  bool selected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selected = !selected;
+        });
+      },
+      child: Center(
+        child: AnimatedContainer(
+          width: selected ? 200.0 : 100.0,
+          height: selected ? 100.0 : 200.0,
+          color: selected ? Colors.red : Colors.blue,
+          alignment: selected
+              ? Alignment.bottomCenter
+              : AlignmentDirectional.topCenter,
+          duration: const Duration(seconds: 2),
+          curve: Curves.fastOutSlowIn,
+          child: const Icon(Icons.flight, size: 75.0, color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
