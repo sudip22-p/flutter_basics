@@ -25,13 +25,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             ),
           );
         }
-        
+
         await Future.delayed(const Duration(seconds: 1), () {
           //do db func then ...
-          return emit(AuthSuccess(uid: '$email-$password'));
+          return emit(AuthSuccess(uid: email));
         });
       } catch (e) {
         return emit(AuthFailure(errorMessage: e.toString()));
+      }
+    });
+    on<AuthLogoutButtonPressed>((event, emit) async {
+      emit(AuthLoading());
+      try {
+        await Future.delayed(const Duration(seconds: 1), () {
+          return emit(AuthInitial());
+        });
+      } catch (e) {
+        emit(AuthFailure(errorMessage: e.toString()));
       }
     });
   }
