@@ -9,6 +9,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginButtonPresssed>(_onLoginButtonPressed);
     on<AuthLogoutButtonPressed>(_onLogoutButtonPressed);
   }
+  @override
+  void onChange(Change<AuthState> change) {
+    super.onChange(change);
+    print('auth bloc change - $change');
+  }
+
+  @override
+  void onTransition(Transition<AuthEvent, AuthState> transition) {
+    super.onTransition(transition);
+    print("transition- $transition");
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    print("error- $error");
+    print("stack trace- $stackTrace");
+  }
+
   void _onLoginButtonPressed(
     AuthLoginButtonPresssed event,
     Emitter<AuthState> emit,
