@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
 import 'package:weather_app/presentation/widgets/additional_info_item.dart';
-// import 'package:weather_app/presentation/widgets/hourly_forecast_item.dart';
+import 'package:weather_app/presentation/widgets/hourly_forecast_item.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -26,9 +26,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       appBar: AppBar(
         title: const Text(
           'Weather App',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -43,14 +41,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
       body: BlocBuilder<WeatherBloc, WeatherState>(
         builder: (context, state) {
           if (state is WeatherFailure) {
-            return Center(
-              child: Text(state.errorMessage),
-            );
+            return Center(child: Text(state.errorMessage));
           }
           if (state is! WeatherSuccess) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
+            return const Center(child: CircularProgressIndicator.adaptive());
           }
 
           final data = state.weatherModel;
@@ -77,10 +71,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: 10,
-                          sigmaY: 10,
-                        ),
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -102,9 +93,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               const SizedBox(height: 16),
                               Text(
                                 currentSky,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                ),
+                                style: const TextStyle(fontSize: 20),
                               ),
                             ],
                           ),
@@ -116,42 +105,31 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 const SizedBox(height: 20),
                 const Text(
                   'Hourly Forecast',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                // SizedBox(
-                //   height: 120,
-                //   child: ListView.builder(
-                //     itemCount: 5,
-                //     scrollDirection: Axis.horizontal,
-                //     itemBuilder: (context, index) {
-                //       final hourlyForecast = data['list'][index + 1];
-                //       final hourlySky =
-                //           data['list'][index + 1]['weather'][0]['main'];
-                //       final hourlyTemp =
-                //           hourlyForecast['main']['temp'].toString();
-                //       final time = DateTime.parse(hourlyForecast['dt_txt']);
-                //       return HourlyForecastItem(
-                //         time: DateFormat.j().format(time),
-                //         temperature: hourlyTemp,
-                //         icon: hourlySky == 'Clouds' || hourlySky == 'Rain'
-                //             ? Icons.cloud
-                //             : Icons.sunny,
-                //       );
-                //     },
-                //   ),
-                // ),
+                SizedBox(
+                  height: 120,
+                  child: ListView.builder(
+                    itemCount: data.hourlyForecast.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final forecast = data.hourlyForecast[index];
+                      return HourlyForecastItem(
+                        time: DateFormat.j().format(forecast.time),
+                        temperature: forecast.temp.toString(),
+                        icon: forecast.sky == 'Clouds' || forecast.sky == 'Rain'
+                            ? Icons.cloud
+                            : Icons.sunny,
+                      );
+                    },
+                  ),
+                ),
 
                 const SizedBox(height: 20),
                 const Text(
                   'Additional Information',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Row(
