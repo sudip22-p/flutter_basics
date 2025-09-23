@@ -1,10 +1,19 @@
-import 'package:firebase_connection_flutter/bloc/auth_bloc.dart';
+import 'package:firebase_connection_flutter/bloc/auth/auth_bloc.dart';
+import 'package:firebase_connection_flutter/bloc/task/task_bloc.dart';
+import 'package:firebase_connection_flutter/models/task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginHome extends StatelessWidget {
+class LoginHome extends StatefulWidget {
   const LoginHome({super.key});
 
+  @override
+  State<LoginHome> createState() => _LoginHomeState();
+}
+
+class _LoginHomeState extends State<LoginHome> {
+  final TextEditingController _taskInputController = TextEditingController();
+  late dynamic uid;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,6 +22,17 @@ class LoginHome extends StatelessWidget {
         title: Text("User Page"),
         centerTitle: true,
         backgroundColor: Colors.greenAccent,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              context.read<AuthBloc>().add(AuthLogoutButtonPressed());
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Icon(Icons.logout),
+            ),
+          ),
+        ],
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -21,52 +41,128 @@ class LoginHome extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          dynamic uid;
           if (state is AuthSuccess) {
             uid = state.uid;
           }
           if (state is AuthLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "welcome home $uid",
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 24,
-                ),
-              ),
-              SizedBox(height: 24),
-              GestureDetector(
-                onTap: () {
-                  context.read<AuthBloc>().add(AuthLogoutButtonPressed());
-                },
-                child: Container(
-                  margin: EdgeInsets.all(24),
-                  width: double.infinity,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(200)),
-                    color: Colors.redAccent,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Logout",
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+          return BlocBuilder<TaskBloc, TaskState>(
+            builder: (context, state) {
+              List<Task> tasks = [];
+              void loadTasks() {
+                context.read<TaskBloc>().add(LoadTasks(uid));
+              }
+
+              if (state is TaskInitial) {
+                loadTasks();
+              }
+              if (state is TaskLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is TaskLoaded) {
+                tasks = state.tasks;
+              }
+              if (state is TaskFailure) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("failed to load the data .."),
+                      IconButton(
+                        onPressed: loadTasks,
+                        icon: const Icon(Icons.refresh),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-              ),
-            ],
+                );
+              }
+              if (tasks.isEmpty) {
+                Center(child: const Text("No tasks available to show "));
+              }
+              return ListView.separated(
+                shrinkWrap: true,
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  final task = tasks[index];
+                  return ListTile(
+                    leading: Checkbox(
+                      value: task.completed,
+                      onChanged: (_) {
+                        context.read<TaskBloc>().add(
+                          TaskCompleted(task.id, task.completed),
+                        );
+                      },
+                    ),
+                    title: Text(task.title),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Confirmation'),
+                              content: Text(
+                                "Are you sure you want to delete this task ?",
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    context.read<TaskBloc>().add(
+                                      TaskDeleted(task.id),
+                                    );
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
+              );
+            },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.greenAccent,
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Add New Task'),
+                content: TextField(
+                  controller: _taskInputController,
+                  decoration: InputDecoration(labelText: "Input task here "),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      context.read<TaskBloc>().add(
+                        NewTaskAdded(
+                          name: _taskInputController.text.trim(),
+                          uid: uid,
+                        ),
+                      );
+                      _taskInputController.clear();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

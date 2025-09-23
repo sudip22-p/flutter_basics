@@ -9,17 +9,20 @@ class FirebaseAuthMethods {
     required String password,
   }) async {
     try {
-      final userCredentials = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      print("sud User created successfully: ${userCredentials.user?.uid}");
-    } on FirebaseAuthException catch (e) {
-      // Re-throw the exception so it can be handled by the bloc
-      throw FirebaseAuthException(
-        code: e.code,
-        message: e.message ?? "An unknown Firebase Auth error occurred",
+      await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
       );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        throw "The password provided is too weak.";
+      } else if (e.code == 'email-already-in-use') {
+        throw "The account already exists for that email.";
+      } else {
+        throw e.message ?? "An unknown sign up error occurred.";
+      }
     } catch (e) {
-      throw Exception("Failed to create user account: $e");
+      throw "An unknown error occurred.";
     }
   }
 
@@ -28,16 +31,25 @@ class FirebaseAuthMethods {
     required String password,
   }) async {
     try {
-      final UserCredential userCredential = await _auth
-          .signInWithEmailAndPassword(email: email, password: password);
-      print("sud User signed in successfully: ${userCredential.user?.uid}");
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseAuthException(
-        code: e.code,
-        message: e.message ?? "An unknown Firebase Auth error occurred",
-      );
+      if (e.code == 'user-not-found') {
+        throw "No user found for that email.";
+      } else if (e.code == 'wrong-password') {
+        throw "Wrong password provided for that user.";
+      } else {
+        throw e.message ?? "An unknown login error occurred.";
+      }
     } catch (e) {
-      throw Exception("Failed to sign in: $e");
+      throw "An unknown error occurred.";
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      throw "Failed to log out.";
     }
   }
 }

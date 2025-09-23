@@ -113,8 +113,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      await FirebaseAuth.instance.signOut();
+      final firebaseAuthMethods = FirebaseAuthMethods(FirebaseAuth.instance);
+      await firebaseAuthMethods.signOut();
       emit(AuthInitial());
     } catch (e) {
       emit(AuthFailure(errorMessage: e.toString()));
