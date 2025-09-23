@@ -77,4 +77,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'flutter-firebase-practice-2.firebasestorage.app',
     iosBundleId: 'com.example.firebaseConnectionFlutter',
   );
+
 }

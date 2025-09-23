@@ -10,7 +10,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print("sud Firebase initialized successfully");
+    // Give Firebase time to fully initialize before starting the app
+    await Future.delayed(const Duration(milliseconds: 500));
+  } catch (e) {
+    print("sud Firebase initialization error: $e");
+  }
+
   runApp(const MyApp());
 }
 

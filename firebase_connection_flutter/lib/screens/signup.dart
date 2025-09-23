@@ -12,6 +12,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,119 +48,121 @@ class _SignUpState extends State<SignUp> {
             return Center(child: CircularProgressIndicator());
           }
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-                    width: double.infinity,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(200)),
-                      color: Colors.greenAccent,
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Continue with Google",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                      width: double.infinity,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(200)),
+                        color: Colors.greenAccent,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Continue with Google",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-                    width: double.infinity,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(200)),
-                      color: Colors.greenAccent,
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Continue with Facebook",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                      width: double.infinity,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(200)),
+                        color: Colors.greenAccent,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Continue with Facebook",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-                    width: double.infinity,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(200)),
-                      color: Colors.greenAccent,
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Continue Anonymously",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                      width: double.infinity,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(200)),
+                        color: Colors.greenAccent,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Continue Anonymously",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 12),
-                Text(
-                  "OR",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 24,
+                  SizedBox(height: 12),
+                  Text(
+                    "OR",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24,
+                    ),
                   ),
-                ),
-                SizedBox(height: 12),
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(labelText: "Email"),
-                ),
-                SizedBox(height: 24),
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(labelText: "Password"),
-                  obscureText: true,
-                ),
-                SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(
-                      AuthSignUpButtonPresssed(
-                        email: _emailController.text.trim(),
-                        password: _passwordController.text.trim(),
-                      ),
-                    );
-                  },
-                  child: Text("Done"),
-                ),
-                SizedBox(height: 24),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, "/login");
-                  },
-                  child: Text(
-                    "Already a user! Login Now.",
-                    style: TextStyle(color: Colors.blueAccent, fontSize: 16),
+                  SizedBox(height: 12),
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(labelText: "Email"),
                   ),
-                ),
-              ],
+                  SizedBox(height: 24),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(labelText: "Password"),
+                    obscureText: true,
+                  ),
+                  SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                        AuthSignUpButtonPresssed(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        ),
+                      );
+                    },
+                    child: Text("Done"),
+                  ),
+                  SizedBox(height: 24),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/login");
+                    },
+                    child: Text(
+                      "Already a user! Login Now.",
+                      style: TextStyle(color: Colors.blueAccent, fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

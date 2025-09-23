@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_connection_flutter/services/firebase_auth_methods.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_event.dart';
@@ -19,14 +22,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   void onTransition(Transition<AuthEvent, AuthState> transition) {
     super.onTransition(transition);
-    print("transition- $transition");
+    print("sud transition- $transition");
   }
 
   @override
   void onError(Object error, StackTrace stackTrace) {
     super.onError(error, stackTrace);
-    print("error- $error");
-    print("stack trace- $stackTrace");
+    print("sud error- $error");
+    print("sud stack trace- $stackTrace");
   }
 
   void _onLoginButtonPressed(
@@ -51,11 +54,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ),
         );
       }
-
-      await Future.delayed(const Duration(seconds: 1), () {
-        //do db func then ...
-        return emit(AuthSuccess(uid: email));
-      });
+      final firebaseAuthMethods = FirebaseAuthMethods(FirebaseAuth.instance);
+      await firebaseAuthMethods.signInWithEmail(
+        email: email,
+        password: password,
+      );
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        emit(AuthSuccess(uid: user.uid));
+      } else {
+        emit(AuthFailure(errorMessage: "Failed to sign in"));
+      }
     } catch (e) {
       return emit(AuthFailure(errorMessage: e.toString()));
     }
@@ -67,7 +76,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     try {
       emit(AuthLoading());
-      //get the email password and check the validity
       final email = event.email;
       final password = event.password;
       final RegExp emailRegex = RegExp(
@@ -83,11 +91,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ),
         );
       }
-
-      await Future.delayed(const Duration(seconds: 1), () {
-        //do db func then ...
-        return emit(AuthSuccess(uid: email));
-      });
+      final firebaseAuthMethods = FirebaseAuthMethods(FirebaseAuth.instance);
+      await firebaseAuthMethods.signUpWithEmail(
+        email: email,
+        password: password,
+      );
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        emit(AuthSuccess(uid: user.uid));
+      } else {
+        emit(AuthFailure(errorMessage: "Failed to create user account"));
+      }
     } catch (e) {
       return emit(AuthFailure(errorMessage: e.toString()));
     }
@@ -99,9 +113,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     try {
-      await Future.delayed(const Duration(seconds: 1), () {
-        return emit(AuthInitial());
-      });
+      await Future.delayed(const Duration(seconds: 1));
+      await FirebaseAuth.instance.signOut();
+      emit(AuthInitial());
     } catch (e) {
       emit(AuthFailure(errorMessage: e.toString()));
     }
