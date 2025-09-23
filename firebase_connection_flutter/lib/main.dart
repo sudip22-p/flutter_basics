@@ -3,6 +3,7 @@ import 'package:firebase_connection_flutter/firebase_options.dart';
 import 'package:firebase_connection_flutter/screens/after_login_home.dart';
 import 'package:firebase_connection_flutter/screens/home_page.dart';
 import 'package:firebase_connection_flutter/screens/login.dart';
+import 'package:firebase_connection_flutter/screens/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         routes: {
           "/": (context) => HomePage(),
           "/login": (context) => Login(),
+          "/signup": (context) => SignUp(),
           "/home": (context) => LoginHome(),
         },
       ),

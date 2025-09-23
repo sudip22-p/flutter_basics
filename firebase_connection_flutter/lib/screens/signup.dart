@@ -2,14 +2,14 @@ import 'package:firebase_connection_flutter/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   @override
@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
           },
           child: Icon(Icons.arrow_back_rounded),
         ),
-        title: Text("Login Page"),
+        title: Text("SignUp Page"),
         centerTitle: true,
         backgroundColor: Colors.greenAccent,
       ),
@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
                     ),
                     child: Center(
                       child: Text(
-                        "Login with Google",
+                        "Continue with Google",
                         style: TextStyle(
                           color: Colors.black87,
                           fontWeight: FontWeight.w500,
@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
                     ),
                     child: Center(
                       child: Text(
-                        "Login with Facebook",
+                        "Continue with Facebook",
                         style: TextStyle(
                           color: Colors.black87,
                           fontWeight: FontWeight.w500,
@@ -107,7 +107,7 @@ class _LoginState extends State<Login> {
                     ),
                     child: Center(
                       child: Text(
-                        "Anonymous Login",
+                        "Continue Anonymously",
                         style: TextStyle(
                           color: Colors.black87,
                           fontWeight: FontWeight.w500,
@@ -141,7 +141,7 @@ class _LoginState extends State<Login> {
                 ElevatedButton(
                   onPressed: () {
                     context.read<AuthBloc>().add(
-                      AuthLoginButtonPresssed(
+                      AuthSignUpButtonPresssed(
                         email: _emailController.text.trim(),
                         password: _passwordController.text.trim(),
                       ),
@@ -152,10 +152,10 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 24),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, "/signup");
+                    Navigator.pushNamed(context, "/login");
                   },
                   child: Text(
-                    "New here! SignUp Now.",
+                    "Already a user! Login Now.",
                     style: TextStyle(color: Colors.blueAccent, fontSize: 16),
                   ),
                 ),
