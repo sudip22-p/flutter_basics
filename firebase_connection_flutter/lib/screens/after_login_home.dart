@@ -94,7 +94,6 @@ class _LoginHomeState extends State<LoginHome> {
                 shrinkWrap: true,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  print("sud22 uid $uid");
                   final task = tasks[index];
                   return ListTile(
                     leading: Checkbox(

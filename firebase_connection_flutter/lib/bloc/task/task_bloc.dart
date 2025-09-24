@@ -15,24 +15,24 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskCompleted>(_onTaskCompleted);
     on<TaskDeleted>(_onTaskDeleted);
   }
-  @override
-  void onChange(Change<TaskState> change) {
-    super.onChange(change);
-    print('auth bloc change - $change');
-  }
+  // @override
+  // void onChange(Change<TaskState> change) {
+  //   super.onChange(change);
+  //   print('auth bloc change - $change');
+  // }
 
-  @override
-  void onTransition(Transition<TaskEvent, TaskState> transition) {
-    super.onTransition(transition);
-    print("sud transition- $transition");
-  }
+  // @override
+  // void onTransition(Transition<TaskEvent, TaskState> transition) {
+  //   super.onTransition(transition);
+  //   print("sud transition- $transition");
+  // }
 
-  @override
-  void onError(Object error, StackTrace stackTrace) {
-    super.onError(error, stackTrace);
-    print("sud error- $error");
-    print("sud stack trace- $stackTrace");
-  }
+  // @override
+  // void onError(Object error, StackTrace stackTrace) {
+  //   super.onError(error, stackTrace);
+  //   print("sud error- $error");
+  //   print("sud stack trace- $stackTrace");
+  // }
 
   void _onLoadTasks(LoadTasks event, Emitter<TaskState> emit) async {
     emit(TaskLoading());
@@ -40,10 +40,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     try {
       await for (var tasks in firestoreService.getTasksStream(event.uid)) {
         emit(TaskLoaded(tasks));
-        print("sud - tasks loaded in await for");
       }
     } catch (e) {
-      print("sud - caught in await for: $e");
       emit(TaskFailure(errorMessage: e.toString()));
     }
   }

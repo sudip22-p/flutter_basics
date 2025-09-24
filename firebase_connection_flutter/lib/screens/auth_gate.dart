@@ -3,6 +3,7 @@ import 'package:firebase_connection_flutter/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+//file for persistent login
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
