@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_connection_flutter/bloc/auth/auth_bloc.dart';
 import 'package:firebase_connection_flutter/bloc/task/task_bloc.dart';
 import 'package:firebase_connection_flutter/models/task.dart';
+import 'package:firebase_connection_flutter/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +15,11 @@ class LoginHome extends StatefulWidget {
 
 class _LoginHomeState extends State<LoginHome> {
   final TextEditingController _taskInputController = TextEditingController();
-  late dynamic uid;
+  String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+  void loadTasks() {
+    context.read<TaskBloc>().add(LoadTasks(uid));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +43,18 @@ class _LoginHomeState extends State<LoginHome> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthInitial) {
-            Navigator.pushReplacementNamed(context, "/");
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => const HomePage(),
+              ),
+            );
           }
         },
         builder: (context, state) {
           if (state is AuthSuccess) {
             uid = state.uid;
+            loadTasks(); //load tasks when entered from authgate not from login/signup
           }
           if (state is AuthLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -50,9 +62,6 @@ class _LoginHomeState extends State<LoginHome> {
           return BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
               List<Task> tasks = [];
-              void loadTasks() {
-                context.read<TaskBloc>().add(LoadTasks(uid));
-              }
 
               if (state is TaskInitial) {
                 loadTasks();
@@ -77,13 +86,15 @@ class _LoginHomeState extends State<LoginHome> {
                   ),
                 );
               }
-              if (tasks.isEmpty) {
-                Center(child: const Text("No tasks available to show "));
+              // ignore: prefer_is_empty
+              if (tasks.length == 0) {
+                return Center(child: const Text("No tasks available to show "));
               }
               return ListView.separated(
                 shrinkWrap: true,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
+                  print("sud22 uid $uid");
                   final task = tasks[index];
                   return ListTile(
                     leading: Checkbox(

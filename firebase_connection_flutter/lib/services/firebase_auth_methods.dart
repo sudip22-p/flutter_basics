@@ -8,6 +8,7 @@ class FirebaseAuthMethods {
     required String email,
     required String password,
   }) async {
+    print("sud inside signUpWithEmail");
     try {
       await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -30,6 +31,7 @@ class FirebaseAuthMethods {
     required String email,
     required String password,
   }) async {
+    print("sud inside signInWithEmail");
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
@@ -38,6 +40,7 @@ class FirebaseAuthMethods {
       } else if (e.code == 'wrong-password') {
         throw "Wrong password provided for that user.";
       } else {
+        print("sud ${e.toString()}");
         throw e.message ?? "An unknown login error occurred.";
       }
     } catch (e) {
@@ -48,6 +51,7 @@ class FirebaseAuthMethods {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
+      await FirebaseAuth.instance.signOut();
     } catch (e) {
       throw "Failed to log out.";
     }

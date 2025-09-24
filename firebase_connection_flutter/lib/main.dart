@@ -2,7 +2,7 @@ import 'package:firebase_connection_flutter/bloc/auth/auth_bloc.dart';
 import 'package:firebase_connection_flutter/bloc/task/task_bloc.dart';
 import 'package:firebase_connection_flutter/firebase_options.dart';
 import 'package:firebase_connection_flutter/screens/after_login_home.dart';
-import 'package:firebase_connection_flutter/screens/home_page.dart';
+import 'package:firebase_connection_flutter/screens/auth_gate.dart';
 import 'package:firebase_connection_flutter/screens/login.dart';
 import 'package:firebase_connection_flutter/screens/signup.dart';
 import 'package:firebase_connection_flutter/services/firestore_task_services.dart';
@@ -37,13 +37,12 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        initialRoute: "/",
         routes: {
-          "/": (context) => HomePage(),
           "/login": (context) => Login(),
           "/signup": (context) => SignUp(),
           "/home": (context) => LoginHome(),
         },
+        home: AuthGate(),
       ),
     );
   }
