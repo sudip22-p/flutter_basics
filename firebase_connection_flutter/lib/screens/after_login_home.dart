@@ -29,14 +29,27 @@ class _LoginHomeState extends State<LoginHome> {
         centerTitle: true,
         backgroundColor: Colors.greenAccent,
         actions: [
-          GestureDetector(
-            onTap: () {
-              context.read<AuthBloc>().add(AuthLogoutButtonPressed());
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Icon(Icons.logout),
-            ),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/community");
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Icon(Icons.chat, color: Colors.blue),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  context.read<AuthBloc>().add(AuthLogoutButtonPressed());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Icon(Icons.logout),
+                ),
+              ),
+            ],
           ),
         ],
       ),
