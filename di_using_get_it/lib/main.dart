@@ -1,9 +1,10 @@
-import 'package:di_using_get_it/app.dart';
+import 'package:di_using_get_it/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'locator.dart';
+import 'service_locator.dart';
 
-void main() {
-  setupLocator();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
   runApp(const MyApp());
 }
 
@@ -13,8 +14,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home: Scaffold(body: const DependencyWidget()),
+      debugShowCheckedModeBanner: false,
+      title: 'Login DI Example',
+      theme: ThemeData(primarySwatch: Colors.indigo),
+      home: const LoginScreen(),
     );
   }
 }
