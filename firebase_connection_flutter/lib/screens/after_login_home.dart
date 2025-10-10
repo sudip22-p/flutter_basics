@@ -26,7 +26,6 @@ class _LoginHomeState extends State<LoginHome> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text("User Page"),
-        centerTitle: true,
         backgroundColor: Colors.greenAccent,
         actions: [
           Row(
