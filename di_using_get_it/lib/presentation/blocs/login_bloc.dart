@@ -1,5 +1,6 @@
 import 'package:di_using_get_it/data/repositories/user_repository.dart';
-
+import 'package:injectable/injectable.dart';
+@injectable
 class LoginBloc {
   final UserRepository _userRepository;
   LoginBloc(this._userRepository);

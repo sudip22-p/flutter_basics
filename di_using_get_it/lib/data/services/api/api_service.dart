@@ -1,3 +1,6 @@
+import 'package:injectable/injectable.dart';
+
+@lazySingleton
 class ApiService {
   final Map<String, String> _userDB = {'sudip': '1234', 'admin': 'admin'};
 
